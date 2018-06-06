@@ -12,27 +12,31 @@ export class LoggedOutScreen extends Component {
   };
 
   onSignin = () => {
+    if (this.state.isSigninFailed) {
+      return;
+    }
+
     this.setState({ isLoading: true });
     setTimeout(() => {
       this.setState({
         isLoading: false,
         isSigninFailed: true,
       });
-      Snackbar.show({
-        title: "你是誰？",
-        duration: Snackbar.LENGTH_INDEFINITE,
-        action: {
-          title: "x",
-          color: "#eeeeee",
-          onPress: () => this.setState({ isSigninFailed: false }),
-        },
-      });
+      setTimeout(() => {
+        Snackbar.show({
+          title: "抱歉，我不認得你是誰。",
+          duration: Snackbar.LENGTH_INDEFINITE,
+          action: {
+            title: "x",
+            color: "white",
+            onPress: () => this.setState({ isSigninFailed: false }),
+          },
+        });
+      }, 50);
     }, 3000);
   };
 
-  onMoreOption = () => {
-    alert("More option clicked");
-  };
+  onMoreOption = () => {};
 
   render() {
     const containerStyle = [styles.container];
