@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "855474751184",
+    "firebase_url": "https://aeonstagram.firebaseio.com",
+    "project_id": "aeonstagram",
+    "storage_bucket": "aeonstagram.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:855474751184:android:b75733018aa7ff25",
+        "android_client_info": {
+          "package_name": "com.aeonstagram"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "855474751184-q337lsnet29psnqpde8nu8d0doqm009p.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "855474751184-q337lsnet29psnqpde8nu8d0doqm009p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB2iNWOll7Amv02Vp2xXe9fZcuqmlGIFp0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { Text, View, StyleSheet, Image, Button, TouchableOpacity } from "react-native";
 import FAIcon from "react-native-vector-icons/FontAwesome";
 import Snackbar from "react-native-snackbar";
+import firebase from "react-native-firebase";
+import { GoogleSignin } from "react-native-google-signin";
 
 import LoadingModal from "../components/LoadingModal";
 
@@ -11,29 +13,45 @@ export class LoggedOutScreen extends Component {
     isSigninFailed: false,
   };
 
-  onSignin = () => {
+  onSignin = async () => {
     if (this.state.isSigninFailed) {
       return;
     }
 
-    this.setState({ isLoading: true });
-    setTimeout(() => {
-      this.setState({
-        isLoading: false,
-        isSigninFailed: true,
-      });
-      setTimeout(() => {
-        Snackbar.show({
-          title: "抱歉，我不認得你是誰。",
-          duration: Snackbar.LENGTH_INDEFINITE,
-          action: {
-            title: "x",
-            color: "white",
-            onPress: () => this.setState({ isSigninFailed: false }),
-          },
-        });
-      }, 50);
-    }, 3000);
+    try {
+      // Add any configuration settings here:
+      await GoogleSignin.configure();
+
+      const data = await GoogleSignin.signIn();
+
+      this.setState({ isLoading: true });
+
+      // create a new firebase credential with the token
+      const credential = firebase.auth.GoogleAuthProvider.credential(data.idToken, data.accessToken);
+      // login with credential
+      const currentUser = await firebase.auth().signInAndRetrieveDataWithCredential(credential);
+
+      if (currentUser.user.email.split("@")[1] !== "aeonmatrix.com") {
+        await firebase.auth().signOut();
+        this.setState({ isSigninFailed: true });
+        setTimeout(() => {
+          Snackbar.show({
+            title: "抱歉，我不認得你是誰。",
+            duration: Snackbar.LENGTH_INDEFINITE,
+            action: {
+              title: "x",
+              color: "white",
+              onPress: () => this.setState({ isSigninFailed: false }),
+            },
+          });
+        }, 200);
+      }
+
+      this.setState({ isLoading: false });
+    } catch (e) {
+      this.setState({ isLoading: false });
+      console.error(e);
+    }
   };
 
   onMoreOption = () => {};
