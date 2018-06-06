@@ -31,9 +31,10 @@ export class LoggedOutScreen extends Component {
       // login with credential
       const currentUser = await firebase.auth().signInAndRetrieveDataWithCredential(credential);
 
-      if (currentUser.user.email.split("@")[1] !== "aeonmatrix.com") {
+      if (currentUser.user.email.split("@")[1] !== "gmail.com") {
         await firebase.auth().signOut();
         this.setState({ isSigninFailed: true });
+        this.setState({ isLoading: false });
         setTimeout(() => {
           Snackbar.show({
             title: "抱歉，我不認得你是誰。",
@@ -45,9 +46,12 @@ export class LoggedOutScreen extends Component {
             },
           });
         }, 200);
+
+        return;
       }
 
       this.setState({ isLoading: false });
+      this.props.navigation.navigate("App");
     } catch (e) {
       this.setState({ isLoading: false });
       console.error(e);
