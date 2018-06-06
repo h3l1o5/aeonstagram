@@ -21,14 +21,14 @@ export class LoadingModal extends Component {
           <View
             style={{
               backgroundColor: "white",
-              width: 100,
-              height: 100,
-              borderRadius: 20,
+              width: 80,
+              height: 80,
+              borderRadius: 10,
               justifyContent: "center",
               alignItems: "center",
             }}
           >
-            <DotIndicator color="#1E8689" size={12} />
+            <DotIndicator color="#1E8689" size={8} />
           </View>
         </View>
       </Modal>

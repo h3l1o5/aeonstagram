@@ -68,7 +68,7 @@ export class LoggedOutScreen extends Component {
     return (
       <View style={containerStyle}>
         <Image source={require("../../assets/logo-AM.png")} style={styles.logo} />
-        <Text style={styles.title}> 歡迎使用Aeonstagram。 </Text>
+        <Text style={styles.title}>歡迎使用Aeonstagram。</Text>
         <TouchableOpacity onPress={this.onSignin} style={signinButtonStyle}>
           <FAIcon name="google" style={{ color: "white", fontSize: 22 }} />
           <Text style={{ color: "white", fontSize: 18, fontWeight: "400", marginLeft: 50 }}>使用Google帳號登入</Text>
@@ -97,12 +97,12 @@ const styles = StyleSheet.create({
     height: 55,
     marginTop: 95,
     marginBottom: 20,
-    marginHorizontal: 20,
+    marginHorizontal: 15,
   },
   title: {
     height: 100,
     color: "white",
-    fontSize: 30,
+    fontSize: 25,
     fontWeight: "400",
     marginHorizontal: 15,
     paddingTop: 20,
@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
   signinButton: {
     flexDirection: "row",
     height: 45,
-    marginHorizontal: 20,
+    marginHorizontal: 15,
     marginBottom: 20,
     paddingHorizontal: 20,
     backgroundColor: "#1E8689",
