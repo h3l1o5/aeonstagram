@@ -1,8 +1,15 @@
 import React, { Component } from "react";
 import { Text, View, StyleSheet, Image, Button, TouchableOpacity } from "react-native";
+import FAIcon from "react-native-vector-icons/FontAwesome";
 
 export class LoggedOutScreen extends Component {
-  onSingin = () => {};
+  onSignin = () => {
+    alert("Signin clicked");
+  };
+
+  onMoreOption = () => {
+    alert("More option clicked");
+  };
 
   render() {
     return (
@@ -10,9 +17,12 @@ export class LoggedOutScreen extends Component {
         <Image source={require("../../assets/logo.png")} style={styles.logo} />
         <Text style={styles.title}> 歡迎使用Airbnb。 </Text>
         <TouchableOpacity onPress={this.onSignin} style={styles.signInButton}>
-          <Text style={{ color: "#1E8689", fontSize: 18, fontWeight: "600" }}>使用Facebook帳號登入</Text>
+          <FAIcon name="facebook" style={{ color: "#1E8689", fontSize: 22 }} />
+          <Text style={{ color: "#1E8689", fontSize: 18, fontWeight: "400", marginLeft: 50 }}>
+            使用Facebook帳號登入
+          </Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={this.onSignin} style={styles.moreOptionButton}>
+        <TouchableOpacity onPress={this.onMoreOption} style={styles.moreOptionButton}>
           <Text style={{ color: "white", fontSize: 16, fontWeight: "600" }}> 更多選項 </Text>
         </TouchableOpacity>
         <Text style={styles.info}>
@@ -45,12 +55,14 @@ const styles = StyleSheet.create({
     paddingTop: 20,
   },
   signInButton: {
+    flexDirection: "row",
     height: 45,
     marginHorizontal: 20,
     marginBottom: 20,
+    paddingHorizontal: 20,
     backgroundColor: "white",
     borderRadius: 30,
-    justifyContent: "center",
+    justifyContent: "flex-start",
     alignItems: "center",
   },
   moreOptionButton: {
