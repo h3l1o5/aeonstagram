@@ -1,10 +1,33 @@
 import React, { Component } from "react";
 import { Text, View, StyleSheet, Image, Button, TouchableOpacity } from "react-native";
 import FAIcon from "react-native-vector-icons/FontAwesome";
+import Snackbar from "react-native-snackbar";
+
+import LoadingModal from "../components/LoadingModal";
 
 export class LoggedOutScreen extends Component {
+  state = {
+    isLoading: false,
+    isSigninFailed: false,
+  };
+
   onSignin = () => {
-    alert("Signin clicked");
+    this.setState({ isLoading: true });
+    setTimeout(() => {
+      this.setState({
+        isLoading: false,
+        isSigninFailed: true,
+      });
+      Snackbar.show({
+        title: "你是誰？",
+        duration: Snackbar.LENGTH_INDEFINITE,
+        action: {
+          title: "x",
+          color: "#eeeeee",
+          onPress: () => this.setState({ isSigninFailed: false }),
+        },
+      });
+    }, 3000);
   };
 
   onMoreOption = () => {
@@ -12,22 +35,30 @@ export class LoggedOutScreen extends Component {
   };
 
   render() {
+    const containerStyle = [styles.container];
+    const signinButtonStyle = [styles.signinButton];
+
+    if (this.state.isSigninFailed) {
+      containerStyle.push({ backgroundColor: "#D43018" });
+      signinButtonStyle.push({ backgroundColor: "#D43018" });
+    }
+
     return (
-      <View style={styles.container}>
-        <Image source={require("../../assets/logo.png")} style={styles.logo} />
-        <Text style={styles.title}> 歡迎使用Airbnb。 </Text>
-        <TouchableOpacity onPress={this.onSignin} style={styles.signInButton}>
-          <FAIcon name="facebook" style={{ color: "#1E8689", fontSize: 22 }} />
-          <Text style={{ color: "#1E8689", fontSize: 18, fontWeight: "400", marginLeft: 50 }}>
-            使用Facebook帳號登入
-          </Text>
+      <View style={containerStyle}>
+        <Image source={require("../../assets/logo-AM.png")} style={styles.logo} />
+        <Text style={styles.title}> 歡迎使用Aeonstagram。 </Text>
+        <TouchableOpacity onPress={this.onSignin} style={signinButtonStyle}>
+          <FAIcon name="google" style={{ color: "white", fontSize: 22 }} />
+          <Text style={{ color: "white", fontSize: 18, fontWeight: "400", marginLeft: 50 }}>使用Google帳號登入</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={this.onMoreOption} style={styles.moreOptionButton}>
           <Text style={{ color: "white", fontSize: 16, fontWeight: "600" }}> 更多選項 </Text>
         </TouchableOpacity>
         <Text style={styles.info}>
-          輕點繼續、建立帳號或「更多」選項，及代表我同意Airbnb的服務條款、付款服務條款、隱私政策與反歧視政策。
+          輕點繼續、建立帳號或「更多」選項，及代表我同意Aeonstagram的服務條款、付款服務條款、隱私政策與反歧視政策。
         </Text>
+
+        <LoadingModal visible={this.state.isLoading} />
       </View>
     );
   }
@@ -54,13 +85,15 @@ const styles = StyleSheet.create({
     marginHorizontal: 15,
     paddingTop: 20,
   },
-  signInButton: {
+  signinButton: {
     flexDirection: "row",
     height: 45,
     marginHorizontal: 20,
     marginBottom: 20,
     paddingHorizontal: 20,
-    backgroundColor: "white",
+    backgroundColor: "#1E8689",
+    borderColor: "white",
+    borderWidth: 1,
     borderRadius: 30,
     justifyContent: "flex-start",
     alignItems: "center",
