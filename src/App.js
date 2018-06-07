@@ -16,6 +16,6 @@ const Route = createSwitchNavigator(
 
 export default class App extends React.Component {
   render() {
-    return <StoryScreen />;
+    return <Route />;
   }
 }

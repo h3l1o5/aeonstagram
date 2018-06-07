@@ -82,9 +82,9 @@ export class LoggedOutScreen extends Component {
         <Text style={styles.title}>歡迎使用Aeonstagram。</Text>
         <TouchableOpacity onPress={this.onSignin} style={signinButtonStyle}>
           <FAIcon name="google" style={{ color: "white", fontSize: 22, zIndex: 1000 }} />
-          <Text style={{ color: "white", fontSize: 18, fontWeight: "400", marginHorizontal: 20 }}>
-            使用Google帳號登入
-          </Text>
+          <View style={{ flex: 1, alignItems: "center" }}>
+            <Text style={{ color: "white", fontSize: 18, fontWeight: "400" }}>使用Google帳號登入</Text>
+          </View>
         </TouchableOpacity>
         <TouchableOpacity onPress={this.onMoreOption} style={styles.moreOptionButton}>
           <Text style={{ color: "white", fontSize: 16, fontWeight: "600" }}> 更多選項 </Text>
