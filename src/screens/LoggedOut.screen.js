@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Text, View, StyleSheet, Image, Button, TouchableOpacity } from "react-native";
+import { Text, View, StyleSheet, Image, Button, TouchableOpacity, SafeAreaView } from "react-native";
 import FAIcon from "react-native-vector-icons/FontAwesome";
 import Snackbar from "react-native-snackbar";
 import firebase from "react-native-firebase";
@@ -33,7 +33,7 @@ export class LoggedOutScreen extends Component {
       // login with credential
       const currentUser = await firebase.auth().signInAndRetrieveDataWithCredential(credential);
 
-      if (currentUser.user.email.split("@")[1] !== "gmail.com") {
+      if (!currentUser.user.email.split("@")[1]) {
         await firebase.auth().signOut();
         this.setState({ isSigninFailed: true });
         this.setState({ isLoading: false });
@@ -55,6 +55,11 @@ export class LoggedOutScreen extends Component {
       this.setState({ isLoading: false });
       this.props.navigation.navigate("App");
     } catch (e) {
+      // Cancel by user
+      if (e.code === -5) {
+        return;
+      }
+
       this.setState({ isLoading: false });
       console.error(e);
     }
@@ -72,12 +77,14 @@ export class LoggedOutScreen extends Component {
     }
 
     return (
-      <View style={containerStyle}>
+      <SafeAreaView style={containerStyle}>
         <Image source={require("../../assets/logo-AM.png")} style={styles.logo} />
         <Text style={styles.title}>歡迎使用Aeonstagram。</Text>
         <TouchableOpacity onPress={this.onSignin} style={signinButtonStyle}>
-          <FAIcon name="google" style={{ color: "white", fontSize: 22 }} />
-          <Text style={{ color: "white", fontSize: 18, fontWeight: "400", marginLeft: 50 }}>使用Google帳號登入</Text>
+          <FAIcon name="google" style={{ color: "white", fontSize: 22, zIndex: 1000 }} />
+          <Text style={{ color: "white", fontSize: 18, fontWeight: "400", marginHorizontal: 20 }}>
+            使用Google帳號登入
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={this.onMoreOption} style={styles.moreOptionButton}>
           <Text style={{ color: "white", fontSize: 16, fontWeight: "600" }}> 更多選項 </Text>
@@ -87,7 +94,7 @@ export class LoggedOutScreen extends Component {
         </Text>
 
         <LoadingModal visible={this.state.isLoading} />
-      </View>
+      </SafeAreaView>
     );
   }
 }

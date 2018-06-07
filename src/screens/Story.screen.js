@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { View, Text, Image, Button, Animated } from "react-native";
-import firebase from "react-native-firebase";
 
 class StoryScreen extends Component {
   state = {
@@ -15,13 +14,11 @@ class StoryScreen extends Component {
   }
 
   render() {
-    const user = firebase.auth().currentUser;
     return (
       <Animated.View
         style={{ flex: 1, opacity: this.state.containerOpacity, justifyContent: "center", alignItems: "center" }}
       >
-        <Text> {user.email} </Text>
-        <Image source={{ uri: user.photoURL }} style={{ width: 50, height: 50 }} />
+        <Text>Stories</Text>
       </Animated.View>
     );
   }

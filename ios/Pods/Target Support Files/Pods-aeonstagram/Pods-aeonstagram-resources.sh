@@ -94,10 +94,12 @@ EOM
 if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_resource "${PODS_ROOT}/GTMOAuth2/Source/Touch/GTMOAuth2ViewTouch.xib"
   install_resource "${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle"
+  install_resource "${PODS_CONFIGURATION_BUILD_DIR}/gRPC/gRPCCertificates.bundle"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_resource "${PODS_ROOT}/GTMOAuth2/Source/Touch/GTMOAuth2ViewTouch.xib"
   install_resource "${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle"
+  install_resource "${PODS_CONFIGURATION_BUILD_DIR}/gRPC/gRPCCertificates.bundle"
 fi
 
 mkdir -p "${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}"

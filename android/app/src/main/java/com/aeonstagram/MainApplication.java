@@ -16,6 +16,8 @@ import java.util.List;
 import co.apptailor.googlesignin.RNGoogleSigninPackage;
 import io.invertase.firebase.RNFirebasePackage;
 import io.invertase.firebase.auth.RNFirebaseAuthPackage;
+import io.invertase.firebase.firestore.RNFirebaseFirestorePackage;
+import io.invertase.firebase.storage.RNFirebaseStoragePackage;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -33,7 +35,9 @@ public class MainApplication extends Application implements ReactApplication {
         new VectorIconsPackage(),
         new RNFirebasePackage(),
         new RNFirebaseAuthPackage(),
-        new RNGoogleSigninPackage()
+        new RNGoogleSigninPackage(),
+        new RNFirebaseFirestorePackage(),
+        new RNFirebaseStoragePackage()
       );
     }
 
