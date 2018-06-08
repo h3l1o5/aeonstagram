@@ -13,24 +13,35 @@ target 'aeonstagram' do
   pod 'Firebase/Storage'
   pod 'GoogleSignIn'
 
-  target 'aeonstagram-tvOSTests' do
-    inherit! :search_paths
-    # Pods for testing
-    pod 'react-native-image-picker', :path => '../node_modules/react-native-image-picker'
+  rn_path = '../node_modules/react-native'
+  pod 'yoga', path: "#{rn_path}/ReactCommon/yoga/yoga.podspec"
+  pod 'React', path: rn_path, subspecs: [
+    'Core',
+    'RCTActionSheet',
+    'RCTAnimation',
+    'RCTGeolocation',
+    'RCTImage',
+    'RCTLinkingIOS',
+    'RCTNetwork',
+    'RCTSettings',
+    'RCTText',
+    'RCTVibration',
+    'RCTWebSocket'
+  ]
 
-  end
+  pod 'RNImageCropPicker', :path =>  '../node_modules/react-native-image-crop-picker'
 
   target 'aeonstagramTests' do
     inherit! :search_paths
     # Pods for testing
   end
-
 end
 
-target 'aeonstagram-tvOS' do
-  # Uncomment the next line if you're using Swift or would like to use dynamic frameworks
-  # use_frameworks!
-
-  # Pods for aeonstagram-tvOS
-
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    if target.name == "React"
+      target.remove_from_project
+    end
+  end
 end
+

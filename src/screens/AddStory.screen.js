@@ -1,49 +1,59 @@
 import React, { Component } from "react";
-import { Text, View, Button, SafeAreaView, StyleSheet, TouchableOpacity, Image } from "react-native";
+import { Text, View, Button, SafeAreaView, StyleSheet, TouchableOpacity, Image, Platform } from "react-native";
 import { StackActions } from "react-navigation";
 import FAIcon from "react-native-vector-icons/FontAwesome";
-import ImagePicker from "react-native-image-picker";
+import firebase from "react-native-firebase";
+import ImagePicker from "react-native-image-crop-picker";
 
-const imagePickerOptions = {
-  title: "選擇照片",
-  storageOptions: {
-    skipBackup: true,
-    path: "images",
-  },
-};
+import ImagePickerPlaceholder from "../components/ImagePickerPlaceholder";
 
 export class AddStoryScreen extends Component {
   state = {
-    avatarSource: "",
+    imageSource: "",
   };
+
   back = () => {
     this.props.navigation.dispatch(StackActions.pop({ n: 1 }));
   };
 
   pickPhoto = () => {
-    ImagePicker.showImagePicker(imagePickerOptions, response => {
-      console.log("Response = ", response);
-
-      if (response.didCancel) {
-        console.log("User cancelled image picker");
-      } else if (response.error) {
-        console.log("ImagePicker Error: ", response.error);
-      } else if (response.customButton) {
-        console.log("User tapped custom button: ", response.customButton);
-      } else {
-        console.log(response);
-
-        let source = { uri: "data:image/jpeg;base64," + response.data };
+    ImagePicker.openPicker({
+      includeBase64: true,
+      compressImageMaxHeight: 600,
+      compressImageMaxWidth: 600,
+    })
+      .then(image => {
+        console.log(image);
+        let source = { uri: "data:image/jpeg;base64," + image.data };
 
         this.setState({
-          avatarSource: source,
+          imageSource: source,
         });
-      }
-    });
+
+        const imagePath = Platform.OS === "ios" ? image.sourceURL : image.path;
+
+        firebase
+          .storage()
+          .ref(`story-photos/${image.filename}`)
+          .putFile(imagePath, { contentType: image.mime })
+          .then(res => {
+            console.log(res);
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      })
+      .catch(err => {
+        console.log(err);
+      });
   };
 
   render() {
-    const renderImage = this.state.avatarSource ? <Image source={this.state.avatarSource} style={{ flex: 1 }} /> : null;
+    const renderImage = this.state.imageSource ? (
+      <Image source={this.state.imageSource} style={{ flex: 1, borderRadius: 15 }} resizeMode="contain" />
+    ) : (
+      <ImagePickerPlaceholder />
+    );
 
     return (
       <SafeAreaView style={styles.container}>
@@ -53,8 +63,11 @@ export class AddStoryScreen extends Component {
           </TouchableOpacity>
         </View>
         <View style={styles.contentContainer}>
-          <Button title="image picker" onPress={this.pickPhoto} />
-          {renderImage}
+          <TouchableOpacity style={styles.contentImage} activeOpacity={0.5} onPress={this.pickPhoto}>
+            {renderImage}
+          </TouchableOpacity>
+          <Text style={styles.contentDescription} />
+          <Text style={styles.contentTime} />
         </View>
       </SafeAreaView>
     );
@@ -77,6 +90,16 @@ const styles = StyleSheet.create({
   contentContainer: {
     flex: 9,
     justifyContent: "center",
+    marginHorizontal: 15,
+  },
+  contentImage: {
+    flex: 6,
+  },
+  contentDescription: {
+    flex: 2,
+  },
+  contentTime: {
+    flex: 2,
   },
 });
 
