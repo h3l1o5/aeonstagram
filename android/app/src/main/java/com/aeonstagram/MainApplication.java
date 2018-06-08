@@ -2,19 +2,20 @@ package com.aeonstagram;
 
 import android.app.Application;
 
-import com.azendoo.reactnativesnackbar.SnackbarPackage;
 import com.facebook.react.ReactApplication;
+import com.oblador.vectoricons.VectorIconsPackage;
+import com.azendoo.reactnativesnackbar.SnackbarPackage;
+import com.imagepicker.ImagePickerPackage;
+import co.apptailor.googlesignin.RNGoogleSigninPackage;
+import io.invertase.firebase.RNFirebasePackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
-import com.oblador.vectoricons.VectorIconsPackage;
 
 import java.util.Arrays;
 import java.util.List;
 
-import co.apptailor.googlesignin.RNGoogleSigninPackage;
-import io.invertase.firebase.RNFirebasePackage;
 import io.invertase.firebase.auth.RNFirebaseAuthPackage;
 import io.invertase.firebase.firestore.RNFirebaseFirestorePackage;
 import io.invertase.firebase.storage.RNFirebaseStoragePackage;
@@ -31,13 +32,14 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
         new MainReactPackage(),
-        new SnackbarPackage(),
-        new VectorIconsPackage(),
-        new RNFirebasePackage(),
-        new RNFirebaseAuthPackage(),
-        new RNGoogleSigninPackage(),
-        new RNFirebaseFirestorePackage(),
-        new RNFirebaseStoragePackage()
+            new VectorIconsPackage(),
+            new SnackbarPackage(),
+            new ImagePickerPackage(),
+            new RNGoogleSigninPackage(),
+            new RNFirebasePackage(),
+            new RNFirebaseAuthPackage(),
+            new RNFirebaseFirestorePackage(),
+            new RNFirebaseStoragePackage()
       );
     }
 
