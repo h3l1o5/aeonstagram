@@ -11,6 +11,8 @@ import {
 } from "react-native";
 import firebase from "react-native-firebase";
 import Ionicon from "react-native-vector-icons/Ionicons";
+import _ from "lodash";
+import moment from "moment";
 
 import BulletItem from "../components/BulletItem";
 import StoryCard from "../components/StoryCard";
@@ -18,51 +20,80 @@ import StoryCard from "../components/StoryCard";
 class StoriesScreen extends Component {
   state = {
     containerOpacity: new Animated.Value(0),
-    stories: [
-      {
-        data: [{ title: "金正恩很開心 金正恩拍手手", date: "2018/5/28 • 下午5:28" }],
-        name: "2018年5月",
-        id: 0,
-      },
-      {
-        data: [
-          { title: "金正恩很開心 金正恩拍手手", date: "2018/4/28 • 下午4:28" },
-          { title: "金正恩很開心 金正恩拍手手", date: "2018/4/27 • 下午4:28" },
-          { title: "金正恩很開心 金正恩拍手手", date: "2018/4/26 • 下午4:28" },
-        ],
-        name: "2018年4月",
-        id: 1,
-      },
-      {
-        data: [
-          { title: "金正恩很開心 金正恩拍手手", date: "2018/3/28 • 下午3:28" },
-          { title: "金正恩很開心 金正恩拍手手", date: "2018/3/27 • 下午3:28" },
-        ],
-        name: "2018年3月",
-        id: 2,
-      },
-      {
-        data: [{ title: "金正恩很開心 金正恩拍手手", date: "2018/2/28 • 下午5:28" }],
-        name: "2018年2月",
-        id: 3,
-      },
-      {
-        data: [],
-        name: "起點",
-        id: 4,
-      },
-    ],
+    stories: null,
   };
 
   componentDidMount() {
-    Animated.timing(this.state.containerOpacity, {
-      toValue: 1,
-      duration: 500,
-    }).start();
+    firebase
+      .firestore()
+      .collection("stories")
+      .get()
+      .then(res => {
+        const stories = _.map(res.docs, doc => doc.data());
+        return Promise.all(
+          _.map(stories, story => {
+            return new Promise((resolve, reject) => {
+              firebase
+                .storage()
+                .ref(story.photo)
+                .getDownloadURL()
+                .then(url => {
+                  resolve({ ...story, photoURL: url });
+                })
+                .catch(err => {
+                  reject(err);
+                });
+            });
+          })
+        );
+      })
+      .then(storiesWithPhotoURL => {
+        const formattedStories = this._formatStories(storiesWithPhotoURL);
+        this.setState({ stories: formattedStories });
+        Animated.timing(this.state.containerOpacity, {
+          toValue: 1,
+          duration: 500,
+        }).start();
+      })
+      .catch(err => {
+        console.error(err);
+      });
   }
 
-  onAddStory = () => {
+  handleClickAdd = () => {
     this.props.navigation.navigate("AddStory");
+  };
+
+  _formatStories = stories => {
+    const result = _
+      .chain(stories)
+      .groupBy(story => moment(story.when).format("YYYYM"))
+      .reduce((acc, group) => {
+        const sortedGroup = _
+          .chain(group)
+          .sortBy(["when", "createAt"])
+          .reverse()
+          .value();
+
+        const groupDate = moment(sortedGroup[0].when);
+        return [
+          ...acc,
+          {
+            data: sortedGroup,
+            name: groupDate.format("YYYY年M月"),
+            priority: groupDate.year() + groupDate.month(),
+          },
+        ];
+      }, [])
+      .push({ data: [], name: "起點", priority: 0 })
+      .sortBy("priority")
+      .reverse()
+      .value();
+
+    result[0].isFirstGroup = true;
+    result[result.length - 1].isLastGroup = true;
+
+    return result;
   };
 
   render() {
@@ -70,9 +101,9 @@ class StoriesScreen extends Component {
       return (
         <View style={styles.story}>
           <StoryCard
-            image="https://firebasestorage.googleapis.com/v0/b/aeonstagram.appspot.com/o/story-photos%2F3.jpg?alt=media&token=c2ae8ecf-980e-4bcf-9d03-26896c1c824a"
-            title={item.title}
-            subtitle={item.date}
+            image={item.photoURL}
+            title={item.whatHappened}
+            subtitle={moment(item.date).format("YYYY年M月D日")}
           />
         </View>
       );
@@ -80,10 +111,10 @@ class StoriesScreen extends Component {
     renderSectionHeader = ({ section }) => {
       const style = [styles.sectionHeader];
 
-      if (section.id === 0) {
+      if (section.isFirstGroup) {
         style.push({ paddingTop: 20 });
       }
-      if (section.id === this.state.stories.length - 1) {
+      if (section.isLastGroup) {
         style.push({ paddingBottom: 20 });
       }
       return (
@@ -96,22 +127,24 @@ class StoriesScreen extends Component {
     return (
       <Animated.View style={[styles.container, { opacity: this.state.containerOpacity }]}>
         <SafeAreaView>
-          <SectionList
-            sections={this.state.stories}
-            renderItem={renderItem}
-            renderSectionHeader={renderSectionHeader}
-            keyExtractor={item => item.date}
-            initialNumToRender={2}
-            showsVerticalScrollIndicator={false}
-            onRefresh={() => {}}
-            refreshing={false}
-            stickySectionHeadersEnabled={false}
-          />
-          <TouchableOpacity style={styles.addButton} activeOpacity={0.6} onPress={this.onAddStory}>
-            <Text style={styles.addButtonText}>撰寫故事</Text>
-            <Ionicon style={styles.addButtonIcon} name="md-add" />
-          </TouchableOpacity>
+          {this.state.stories && (
+            <SectionList
+              sections={this.state.stories}
+              renderItem={renderItem}
+              renderSectionHeader={renderSectionHeader}
+              keyExtractor={item => item.createAt}
+              initialNumToRender={2}
+              showsVerticalScrollIndicator={false}
+              onRefresh={() => {}}
+              refreshing={false}
+              stickySectionHeadersEnabled={false}
+            />
+          )}
         </SafeAreaView>
+        <TouchableOpacity style={styles.addButton} activeOpacity={0.6} onPress={this.handleClickAdd}>
+          <Text style={styles.addButtonText}>撰寫故事</Text>
+          <Ionicon style={styles.addButtonIcon} name="md-add" />
+        </TouchableOpacity>
       </Animated.View>
     );
   }
