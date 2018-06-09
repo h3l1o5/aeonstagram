@@ -3,7 +3,6 @@ import { View, Text, Image, StyleSheet } from "react-native";
 
 class StoryCard extends Component {
   render() {
-    console.log(this.props.image);
     return (
       <View style={styles.container}>
         <View style={styles.headerContainer}>

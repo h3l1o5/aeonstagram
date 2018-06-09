@@ -79,7 +79,7 @@ class StoriesScreen extends Component {
     };
     renderSectionHeader = ({ section }) => {
       const style = [styles.sectionHeader];
-      console.log(section);
+
       if (section.id === 0) {
         style.push({ paddingTop: 20 });
       }

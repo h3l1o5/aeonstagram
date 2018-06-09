@@ -4,62 +4,77 @@ import { StackActions } from "react-navigation";
 import FAIcon from "react-native-vector-icons/FontAwesome";
 import firebase from "react-native-firebase";
 import ImagePicker from "react-native-image-crop-picker";
+import uuidv1 from "uuid/v1";
 
 import ImagePickerPlaceholder from "../components/ImagePickerPlaceholder";
 import CustomTextInput from "../components/CustomTextInput";
 import DateInputIOS from "../components/DateInputIOS";
 import DateInputAndroid from "../components/DateInputAndroid";
+import LoadingModal from "../components/LoadingModal";
 
 export class AddStoryScreen extends Component {
   state = {
     whatHappened: "",
-    date: null,
-    imageSource: "",
+    when: null,
+    image: null,
+    isLoading: false,
   };
 
   handleBack = () => {
     this.props.navigation.dispatch(StackActions.pop({ n: 1 }));
   };
 
+  handleSubmit = () => {
+    this.setState({ isLoading: true });
+
+    const uuid = uuidv1();
+    const imagePath = Platform.OS === "ios" ? this.state.image.sourceURL : this.state.image.path;
+
+    firebase
+      .storage()
+      .ref(`story-photos/${uuid}.jpg`)
+      .putFile(imagePath, { contentType: this.state.image.mime })
+      .then(() => {
+        return firebase
+          .firestore()
+          .collection("stories")
+          .add({
+            createAt: new Date(),
+            creator: firebase.auth().currentUser.email,
+            whatHappened: this.state.whatHappened,
+            when: this.state.when,
+            photo: `story-photos/${uuid}.jpg`,
+          });
+      })
+      .then(() => {
+        this.setState({ isLoading: false });
+        this.handleBack();
+      })
+      .catch(err => {
+        this.setState({ isLoading: false });
+        console.error(err);
+      });
+  };
+
   handlePickPhoto = () => {
     ImagePicker.openPicker({
       includeBase64: true,
       compressImageMaxHeight: 600,
-      compressImageMaxWidth: 600,
+      compressImageMaxWidth: 400,
     })
       .then(image => {
-        console.log(image);
-        let source = { uri: "data:image/jpeg;base64," + image.data };
-
-        this.setState({
-          imageSource: source,
-        });
-
-        const imagePath = Platform.OS === "ios" ? image.sourceURL : image.path;
-
-        firebase
-          .storage()
-          .ref(`story-photos/${image.filename}`)
-          .putFile(imagePath, { contentType: image.mime })
-          .then(res => {
-            console.log(res);
-          })
-          .catch(err => {
-            console.log(err);
-          });
+        this.setState({ image });
       })
       .catch(err => {
         console.log(err);
       });
   };
 
-  handlePickDate = date => {
-    console.log(date);
-    this.setState({ date });
+  handlePickDate = when => {
+    this.setState({ when });
   };
 
   handleChangeWhatHappened = whatHappened => {
-    console.log(whatHappened);
     this.setState({ whatHappened });
   };
 
@@ -71,13 +86,17 @@ export class AddStoryScreen extends Component {
         <DateInputAndroid onPickDate={this.handlePickDate} />
       );
 
-    const renderImage = this.state.imageSource ? (
-      <Image source={this.state.imageSource} style={{ flex: 1 }} resizeMode="contain" />
+    const renderImage = this.state.image ? (
+      <Image
+        source={{ uri: "data:image/jpeg;base64," + this.state.image.data }}
+        style={{ flex: 1 }}
+        resizeMode="contain"
+      />
     ) : (
       <ImagePickerPlaceholder />
     );
 
-    const isValidToAdd = this.state.date && this.state.whatHappened && this.state.imageSource;
+    const isValidToSubmit = this.state.when && this.state.whatHappened && this.state.image;
 
     return (
       <SafeAreaView style={styles.container}>
@@ -85,8 +104,12 @@ export class AddStoryScreen extends Component {
           <TouchableOpacity style={styles.headerCloseButton} onPress={this.handleBack}>
             <FAIcon name="times" size={22} />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.headerCheckButton} activeOpacity={isValidToAdd ? 0.5 : 1} onPress={() => {}}>
-            <FAIcon name="check" size={22} color={isValidToAdd ? "#000" : "#ccc"} />
+          <TouchableOpacity
+            style={styles.headerCheckButton}
+            activeOpacity={isValidToSubmit ? 0.5 : 1}
+            onPress={this.handleSubmit}
+          >
+            <FAIcon name="check" size={22} color={isValidToSubmit ? "#000" : "#ccc"} />
           </TouchableOpacity>
         </View>
         <View style={styles.contentContainer}>
@@ -98,6 +121,7 @@ export class AddStoryScreen extends Component {
             {renderImage}
           </TouchableOpacity>
         </View>
+        <LoadingModal visible={this.state.isLoading} blur />
       </SafeAreaView>
     );
   }
@@ -107,6 +131,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "stretch",
+    backgroundColor: "#fff",
   },
   headerContainer: {
     flex: 1,

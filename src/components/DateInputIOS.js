@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "flex-end",
     paddingBottom: 10,
-    backgroundColor: "white",
-    opacity: 0.8,
+    backgroundColor: "#eee",
+    opacity: 0.9,
   },
 });
