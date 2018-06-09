@@ -13,9 +13,6 @@ class StoryCard extends Component {
         <View style={styles.imageContainer}>
           <Image style={styles.image} resizeMode="cover" source={{ uri: this.props.image }} />
         </View>
-        <View style={styles.footerContainer}>
-          <Text style={{ fontWeight: "bold" }}>#thuglife #yolo</Text>
-        </View>
       </View>
     );
   }
@@ -32,11 +29,10 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.8,
     shadowRadius: 4,
     elevation: 1.5,
-    height: 300,
+    height: 350,
   },
   headerContainer: {
-    flex: 1,
-    paddingTop: 10,
+    paddingVertical: 10,
     paddingHorizontal: 20,
   },
   headerSubtitle: {
@@ -48,15 +44,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   imageContainer: {
-    flex: 4,
+    flex: 1,
   },
   image: {
     flex: 1,
-  },
-  footerContainer: {
-    flex: 1,
-    justifyContent: "center",
-    paddingHorizontal: 20,
   },
 });
 

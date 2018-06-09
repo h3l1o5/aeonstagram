@@ -6,17 +6,22 @@ import firebase from "react-native-firebase";
 import ImagePicker from "react-native-image-crop-picker";
 
 import ImagePickerPlaceholder from "../components/ImagePickerPlaceholder";
+import CustomTextInput from "../components/CustomTextInput";
+import DateInputIOS from "../components/DateInputIOS";
+import DateInputAndroid from "../components/DateInputAndroid";
 
 export class AddStoryScreen extends Component {
   state = {
+    whatHappened: "",
+    date: null,
     imageSource: "",
   };
 
-  back = () => {
+  handleBack = () => {
     this.props.navigation.dispatch(StackActions.pop({ n: 1 }));
   };
 
-  pickPhoto = () => {
+  handlePickPhoto = () => {
     ImagePicker.openPicker({
       includeBase64: true,
       compressImageMaxHeight: 600,
@@ -48,26 +53,50 @@ export class AddStoryScreen extends Component {
       });
   };
 
+  handlePickDate = date => {
+    console.log(date);
+    this.setState({ date });
+  };
+
+  handleChangeWhatHappened = whatHappened => {
+    console.log(whatHappened);
+    this.setState({ whatHappened });
+  };
+
   render() {
+    const renderDatePicker =
+      Platform.OS === "ios" ? (
+        <DateInputIOS onPickDate={this.handlePickDate} />
+      ) : (
+        <DateInputAndroid onPickDate={this.handlePickDate} />
+      );
+
     const renderImage = this.state.imageSource ? (
-      <Image source={this.state.imageSource} style={{ flex: 1, borderRadius: 15 }} resizeMode="contain" />
+      <Image source={this.state.imageSource} style={{ flex: 1 }} resizeMode="contain" />
     ) : (
       <ImagePickerPlaceholder />
     );
 
+    const isValidToAdd = this.state.date && this.state.whatHappened && this.state.imageSource;
+
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.headerContainer}>
-          <TouchableOpacity style={styles.headerCloseButton} onPress={this.back}>
+          <TouchableOpacity style={styles.headerCloseButton} onPress={this.handleBack}>
             <FAIcon name="times" size={22} />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.headerCheckButton} activeOpacity={isValidToAdd ? 0.5 : 1} onPress={() => {}}>
+            <FAIcon name="check" size={22} color={isValidToAdd ? "#000" : "#ccc"} />
           </TouchableOpacity>
         </View>
         <View style={styles.contentContainer}>
-          <TouchableOpacity style={styles.contentImage} activeOpacity={0.5} onPress={this.pickPhoto}>
+          <View style={styles.contentDescription}>
+            <CustomTextInput onChangeText={this.handleChangeWhatHappened} />
+          </View>
+          <View style={styles.contentTime}>{renderDatePicker}</View>
+          <TouchableOpacity style={styles.contentImage} activeOpacity={0.5} onPress={this.handlePickPhoto}>
             {renderImage}
           </TouchableOpacity>
-          <Text style={styles.contentDescription} />
-          <Text style={styles.contentTime} />
         </View>
       </SafeAreaView>
     );
@@ -81,25 +110,32 @@ const styles = StyleSheet.create({
   },
   headerContainer: {
     flex: 1,
-    justifyContent: "center",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   headerCloseButton: {
     marginLeft: 20,
-    alignSelf: "flex-start",
+    alignSelf: "center",
+  },
+  headerCheckButton: {
+    marginRight: 20,
+    alignSelf: "center",
   },
   contentContainer: {
     flex: 9,
     justifyContent: "center",
     marginHorizontal: 15,
+    marginBottom: 10,
   },
   contentImage: {
-    flex: 6,
+    flex: 8,
   },
   contentDescription: {
-    flex: 2,
+    flex: 1,
   },
   contentTime: {
-    flex: 2,
+    flex: 1,
   },
 });
 

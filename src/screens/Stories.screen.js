@@ -70,7 +70,7 @@ class StoriesScreen extends Component {
       return (
         <View style={styles.story}>
           <StoryCard
-            image="https://firebasestorage.googleapis.com/v0/b/aeonstagram.appspot.com/o/story-photos%2F1.jpg?alt=media&token=fac6af3e-41b7-4ad9-8c92-1e85edc51e65"
+            image="https://firebasestorage.googleapis.com/v0/b/aeonstagram.appspot.com/o/story-photos%2F3.jpg?alt=media&token=c2ae8ecf-980e-4bcf-9d03-26896c1c824a"
             title={item.title}
             subtitle={item.date}
           />
@@ -79,8 +79,12 @@ class StoriesScreen extends Component {
     };
     renderSectionHeader = ({ section }) => {
       const style = [styles.sectionHeader];
+      console.log(section);
       if (section.id === 0) {
         style.push({ paddingTop: 20 });
+      }
+      if (section.id === this.state.stories.length - 1) {
+        style.push({ paddingBottom: 20 });
       }
       return (
         <View style={style}>
@@ -90,7 +94,7 @@ class StoriesScreen extends Component {
     };
 
     return (
-      <Animated.View style={{ opacity: this.state.containerOpacity, flex: 1 }}>
+      <Animated.View style={[styles.container, { opacity: this.state.containerOpacity }]}>
         <SafeAreaView>
           <SectionList
             sections={this.state.stories}
@@ -114,7 +118,12 @@ class StoriesScreen extends Component {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+  },
   story: {
+    maxHeight: 600,
     borderLeftColor: "#1E8689",
     borderLeftWidth: 2.5,
     paddingLeft: 30,
@@ -141,7 +150,7 @@ const styles = StyleSheet.create({
     bottom: 40,
     right: (Dimensions.get("window").width - 120) / 2,
     padding: 2,
-    shadowColor: "#000000",
+    shadowColor: "#999",
     shadowOpacity: 0.8,
     shadowRadius: 2,
     shadowOffset: {
