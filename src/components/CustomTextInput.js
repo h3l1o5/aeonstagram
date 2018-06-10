@@ -2,12 +2,7 @@ import React, { Component } from "react";
 import { Text, StyleSheet, View, TextInput } from "react-native";
 
 export default class CustomTextInput extends Component {
-  state = {
-    currentLength: 0,
-  };
-
   handleChangeText = text => {
-    this.setState({ currentLength: text.length });
     this.props.onChangeText(text);
   };
 
@@ -20,10 +15,8 @@ export default class CustomTextInput extends Component {
           placeholderTextColor="#4D4D4D"
           underlineColorAndroid="transparent"
           returnKeyType="done"
-          maxLength={15}
           onChangeText={this.handleChangeText}
         />
-        <Text style={styles.hint}>{15 - this.state.currentLength}</Text>
       </View>
     );
   }
@@ -44,6 +37,7 @@ const styles = StyleSheet.create({
   hint: {
     flex: 1,
     fontSize: 10,
+    marginLeft: 5,
     color: "#bbb",
   },
 });

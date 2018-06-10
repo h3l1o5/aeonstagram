@@ -28,22 +28,22 @@ export class AddStoryScreen extends Component {
     this.setState({ isLoading: true });
 
     const uuid = uuidv1();
-    const imagePath = Platform.OS === "ios" ? this.state.image.sourceURL : this.state.image.path;
-
     firebase
       .storage()
       .ref(`story-photos/${uuid}.jpg`)
-      .putFile(imagePath, { contentType: this.state.image.mime })
-      .then(() => {
+      .putFile(this.state.image.path, { contentType: this.state.image.mime })
+      .then(res => {
         return firebase
           .firestore()
           .collection("stories")
           .add({
             createAt: new Date(),
             creator: firebase.auth().currentUser.email,
+            creatorAvatar: firebase.auth().currentUser.photoURL,
             whatHappened: this.state.whatHappened,
             when: this.state.when,
             photo: `story-photos/${uuid}.jpg`,
+            photoURL: res.downloadURL,
           });
       })
       .then(() => {
@@ -58,9 +58,11 @@ export class AddStoryScreen extends Component {
 
   handlePickPhoto = () => {
     ImagePicker.openPicker({
+      mediaType: "photo",
       includeBase64: true,
-      compressImageMaxHeight: 600,
-      compressImageMaxWidth: 400,
+      compressImageMaxHeight: 300,
+      compressImageMaxWidth: 300,
+      compressImageQuality: 1,
     })
       .then(image => {
         this.setState({ image });

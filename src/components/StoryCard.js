@@ -18,20 +18,21 @@ class StoryCard extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <View style={styles.container}>
-          <View style={styles.headerContainer}>
+        <View style={styles.headerContainer}>
+          <Image style={styles.headerAvatar} source={{ uri: this.props.avatar }} resizeMode="cover" />
+          <View style={styles.headerContent}>
             <Text style={styles.headerSubtitle}>{this.props.subtitle}</Text>
             <Text style={styles.headerTitle}>{this.props.title}</Text>
           </View>
-          <View style={styles.imageContainer}>
-            <Animated.Image
-              style={[styles.image, { opacity: this.state.imageOpacity }]}
-              resizeMode="cover"
-              source={{ uri: this.props.image }}
-              onLoad={this.handleImageLoaded}
-            />
-            {!this.state.isImageLoaded && <BarIndicator color="#1E8689" size={50} />}
-          </View>
+        </View>
+        <View style={styles.imageContainer}>
+          <Animated.Image
+            style={[styles.image, { opacity: this.state.imageOpacity }]}
+            resizeMode="cover"
+            source={{ uri: this.props.image }}
+            onLoad={this.handleImageLoaded}
+          />
+          {!this.state.isImageLoaded && <BarIndicator color="#1E8689" size={50} />}
         </View>
       </View>
     );
@@ -41,20 +42,30 @@ class StoryCard extends Component {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "#fff",
-    borderWidth: 1,
-    borderRadius: 3,
-    borderColor: "#eee",
-    borderBottomWidth: 1,
-    shadowColor: "#ccc",
-    shadowOffset: { width: 2, height: 2 },
-    shadowOpacity: 0.8,
-    shadowRadius: 4,
-    elevation: 1.5,
-    height: 350,
+    borderRadius: 2,
+    shadowColor: "#000",
+    shadowOpacity: 0.3,
+    shadowRadius: 1,
+    shadowOffset: {
+      height: 1,
+      width: 0.3,
+    },
   },
   headerContainer: {
+    flexDirection: "row",
     paddingVertical: 10,
-    paddingHorizontal: 20,
+    paddingHorizontal: 10,
+  },
+  headerAvatar: {
+    height: 40,
+    width: 40,
+    borderColor: "#BCC3CC",
+    borderWidth: 1.5,
+    borderRadius: 20,
+    marginRight: 10,
+  },
+  headerContent: {
+    flex: 1,
   },
   headerSubtitle: {
     color: "#8E8E8E",
@@ -65,7 +76,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   imageContainer: {
-    flex: 1,
+    height: 300,
   },
   image: {
     flex: 1,

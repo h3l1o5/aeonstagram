@@ -27,36 +27,40 @@ class StoriesScreen extends Component {
     firebase
       .firestore()
       .collection("stories")
-      .get()
-      .then(res => {
-        const stories = _.map(res.docs, doc => doc.data());
-        return Promise.all(
-          _.map(stories, story => {
-            return new Promise((resolve, reject) => {
-              firebase
-                .storage()
-                .ref(story.photo)
-                .getDownloadURL()
-                .then(url => {
-                  resolve({ ...story, photoURL: url });
-                })
-                .catch(err => {
-                  reject(err);
-                });
-            });
-          })
-        );
-      })
-      .then(storiesWithPhotoURL => {
-        const formattedStories = this._formatStories(storiesWithPhotoURL);
-        this.setState({ stories: formattedStories });
+      .onSnapshot(snapshot => {
+        const stories = _
+          .chain(snapshot.docChanges)
+          .filter(change => change.type === "added")
+          .map(change => change.doc.data());
+
+        const formattedStories = this._formatStories(stories);
+
+        if (!this.state.stories) {
+          this.setState({ stories: formattedStories });
+        } else {
+          const newStories = _
+            .chain(formattedStories)
+            .reduce((acc, group) => {
+              const existedGroupIndex = _.findIndex(acc, { priority: group.priority });
+              if (existedGroupIndex === -1) {
+                return [group, ...acc];
+              } else {
+                acc[existedGroupIndex].data = [...group.data, ...acc[existedGroupIndex].data];
+                return acc;
+              }
+            }, this.state.stories)
+            .sortBy("priority")
+            .reverse()
+            .value();
+
+          console.log(newStories);
+          this.setState({ stories: newStories });
+        }
         Animated.timing(this.state.containerOpacity, {
           toValue: 1,
           duration: 500,
+          useNativeDriver: true,
         }).start();
-      })
-      .catch(err => {
-        console.error(err);
       });
   }
 
@@ -81,7 +85,7 @@ class StoriesScreen extends Component {
           {
             data: sortedGroup,
             name: groupDate.format("YYYY年M月"),
-            priority: groupDate.year() + groupDate.month(),
+            priority: groupDate.year() * 10 + groupDate.month(),
           },
         ];
       }, [])
@@ -101,9 +105,10 @@ class StoriesScreen extends Component {
       return (
         <View style={styles.story}>
           <StoryCard
+            avatar={item.creatorAvatar}
             image={item.photoURL}
             title={item.whatHappened}
-            subtitle={moment(item.date).format("YYYY年M月D日")}
+            subtitle={moment(item.when).format("YYYY年M月D日")}
           />
         </View>
       );
@@ -170,9 +175,7 @@ const styles = StyleSheet.create({
   },
   addButton: {
     flexDirection: "row",
-    backgroundColor: "white",
-    borderColor: "white",
-    borderWidth: 1,
+    backgroundColor: "#fff",
     height: 50,
     width: 120,
     zIndex: 100,
@@ -183,14 +186,13 @@ const styles = StyleSheet.create({
     bottom: 40,
     right: (Dimensions.get("window").width - 120) / 2,
     padding: 2,
-    shadowColor: "#999",
-    shadowOpacity: 0.8,
-    shadowRadius: 2,
+    shadowColor: "#000",
+    shadowOpacity: 0.3,
+    shadowRadius: 1,
     shadowOffset: {
       height: 1,
-      width: 0,
+      width: 0.3,
     },
-    elevation: 2,
   },
   addButtonText: {
     fontSize: 12,
