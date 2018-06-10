@@ -149,7 +149,7 @@ class StoriesScreen extends Component {
 
     return (
       <Animated.View style={[styles.container, { opacity: this.state.containerOpacity }]}>
-        <SafeAreaView>
+        <SafeAreaView style={{ flex: 1 }}>
           {this.state.stories && (
             <SectionList
               sections={this.state.stories}
@@ -158,8 +158,6 @@ class StoriesScreen extends Component {
               keyExtractor={item => item.createAt}
               initialNumToRender={2}
               showsVerticalScrollIndicator={false}
-              onRefresh={() => {}}
-              refreshing={false}
               stickySectionHeadersEnabled={false}
             />
           )}

@@ -25,6 +25,10 @@ export class AddStoryScreen extends Component {
   };
 
   handleSubmit = () => {
+    if (!this.state.whatHappened || !this.state.when || !this.state.image) {
+      return;
+    }
+
     this.setState({ isLoading: true });
 
     const uuid = uuidv1();
@@ -65,6 +69,10 @@ export class AddStoryScreen extends Component {
       compressImageQuality: 1,
     })
       .then(image => {
+        if (image.mime.split("/")[0] !== "image") {
+          return;
+        }
+
         this.setState({ image });
       })
       .catch(err => {

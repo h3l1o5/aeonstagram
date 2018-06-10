@@ -12,6 +12,7 @@ class StoryCard extends Component {
     Animated.timing(this.state.imageOpacity, {
       toValue: 1,
       duration: 800,
+      useNativeDriver: true,
     }).start();
   };
 
