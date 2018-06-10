@@ -9,7 +9,6 @@ import {
   TouchableOpacity,
   Dimensions,
   Modal,
-  Image,
 } from "react-native";
 import firebase from "react-native-firebase";
 import Ionicon from "react-native-vector-icons/Ionicons";
@@ -54,7 +53,12 @@ class StoriesScreen extends Component {
               if (existedGroupIndex === -1) {
                 return [group, ...acc];
               } else {
-                acc[existedGroupIndex].data = [...group.data, ...acc[existedGroupIndex].data];
+                acc[existedGroupIndex].data = _
+                  .chain([...group.data, ...acc[existedGroupIndex].data])
+                  .sortBy("when")
+                  .reverse()
+                  .value();
+
                 return acc;
               }
             }, this.state.stories)
@@ -166,7 +170,7 @@ class StoriesScreen extends Component {
           <Text style={styles.addButtonText}>撰寫故事</Text>
           <Ionicon style={styles.addButtonIcon} name="md-add" />
         </TouchableOpacity>
-        <Modal visible={this.state.imageViewer.isShowing} transparent={true}>
+        <Modal visible={this.state.imageViewer.isShowing} transparent={true} onRequestClose={() => {}}>
           <ImageViewer
             imageUrls={[
               {

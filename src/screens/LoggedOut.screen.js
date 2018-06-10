@@ -4,6 +4,7 @@ import FAIcon from "react-native-vector-icons/FontAwesome";
 import Snackbar from "react-native-snackbar";
 import firebase from "react-native-firebase";
 import { GoogleSignin } from "react-native-google-signin";
+import * as Animatable from "react-native-animatable";
 
 import LoadingModal from "../components/LoadingModal";
 
@@ -78,12 +79,19 @@ export class LoggedOutScreen extends Component {
 
     return (
       <SafeAreaView style={containerStyle}>
-        <Image source={require("../../assets/logo-AM.png")} style={styles.logo} />
+        <Animatable.Image
+          animation="pulse"
+          iterationCount="infinite"
+          source={require("../../assets/logo-AM.png")}
+          style={styles.logo}
+        />
         <Text style={styles.title}>歡迎使用Aeonstagram。</Text>
-        <TouchableOpacity onPress={this.onSignin} style={signinButtonStyle}>
-          <FAIcon name="google" style={{ color: "white", fontSize: 22, zIndex: 1000 }} />
-          <View style={{ flex: 1, alignItems: "center" }}>
-            <Text style={{ color: "white", fontSize: 18, fontWeight: "400" }}>使用Google帳號登入</Text>
+        <TouchableOpacity onPress={this.onSignin}>
+          <View style={signinButtonStyle}>
+            <FAIcon name="google" style={{ color: "white", fontSize: 22, zIndex: 1000 }} />
+            <View style={{ flex: 1, alignItems: "center" }}>
+              <Text style={{ color: "white", fontSize: 18, fontWeight: "400" }}>使用Google帳號登入</Text>
+            </View>
           </View>
         </TouchableOpacity>
         <TouchableOpacity onPress={this.onMoreOption} style={styles.moreOptionButton}>
@@ -127,8 +135,14 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     paddingHorizontal: 20,
     backgroundColor: "#1E8689",
-    borderColor: "white",
-    borderWidth: 1,
+    shadowColor: "#000",
+    shadowOpacity: 0.3,
+    shadowRadius: 1,
+    shadowOffset: {
+      height: 1,
+      width: 0.3,
+    },
+    elevation: 3,
     borderRadius: 30,
     justifyContent: "flex-start",
     alignItems: "center",
