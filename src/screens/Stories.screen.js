@@ -8,11 +8,15 @@ import {
   SafeAreaView,
   TouchableOpacity,
   Dimensions,
+  Modal,
+  Image,
 } from "react-native";
 import firebase from "react-native-firebase";
 import Ionicon from "react-native-vector-icons/Ionicons";
 import _ from "lodash";
 import moment from "moment";
+import ImageViewer from "react-native-image-zoom-viewer";
+import { BarIndicator } from "react-native-indicators";
 
 import BulletItem from "../components/BulletItem";
 import StoryCard from "../components/StoryCard";
@@ -21,6 +25,10 @@ class StoriesScreen extends Component {
   state = {
     containerOpacity: new Animated.Value(0),
     stories: null,
+    imageViewer: {
+      isShowing: false,
+      url: null,
+    },
   };
 
   componentDidMount() {
@@ -31,7 +39,8 @@ class StoriesScreen extends Component {
         const stories = _
           .chain(snapshot.docChanges)
           .filter(change => change.type === "added")
-          .map(change => change.doc.data());
+          .map(change => change.doc.data())
+          .value();
 
         const formattedStories = this._formatStories(stories);
 
@@ -66,6 +75,14 @@ class StoriesScreen extends Component {
 
   handleClickAdd = () => {
     this.props.navigation.navigate("AddStory");
+  };
+
+  handleClickStoryImage = imageURL => {
+    this.setState({ imageViewer: { isShowing: true, url: imageURL } });
+  };
+
+  handleCloseImageViewer = () => {
+    this.setState({ imageViewer: { isShowing: false, url: null } });
   };
 
   _formatStories = stories => {
@@ -109,6 +126,7 @@ class StoriesScreen extends Component {
             image={item.photoURL}
             title={item.whatHappened}
             subtitle={moment(item.when).format("YYYY年M月D日")}
+            onClickImage={this.handleClickStoryImage}
           />
         </View>
       );
@@ -150,6 +168,18 @@ class StoriesScreen extends Component {
           <Text style={styles.addButtonText}>撰寫故事</Text>
           <Ionicon style={styles.addButtonIcon} name="md-add" />
         </TouchableOpacity>
+        <Modal visible={this.state.imageViewer.isShowing} transparent={true}>
+          <ImageViewer
+            imageUrls={[
+              {
+                url: this.state.imageViewer.url,
+              },
+            ]}
+            onSwipeDown={this.handleCloseImageViewer}
+            renderIndicator={() => null}
+            maxOverflow={0}
+          />
+        </Modal>
       </Animated.View>
     );
   }
@@ -193,6 +223,7 @@ const styles = StyleSheet.create({
       height: 1,
       width: 0.3,
     },
+    elevation: 2,
   },
   addButtonText: {
     fontSize: 12,

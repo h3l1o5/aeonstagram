@@ -60,8 +60,8 @@ export class AddStoryScreen extends Component {
     ImagePicker.openPicker({
       mediaType: "photo",
       includeBase64: true,
-      compressImageMaxHeight: 300,
-      compressImageMaxWidth: 300,
+      compressImageMaxHeight: 600,
+      compressImageMaxWidth: 600,
       compressImageQuality: 1,
     })
       .then(image => {

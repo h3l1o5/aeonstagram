@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, Image, StyleSheet, Animated } from "react-native";
+import { View, Text, Image, StyleSheet, Animated, TouchableOpacity } from "react-native";
 import { BarIndicator } from "react-native-indicators";
 class StoryCard extends Component {
   state = {
@@ -26,12 +26,20 @@ class StoryCard extends Component {
           </View>
         </View>
         <View style={styles.imageContainer}>
-          <Animated.Image
-            style={[styles.image, { opacity: this.state.imageOpacity }]}
-            resizeMode="cover"
-            source={{ uri: this.props.image }}
-            onLoad={this.handleImageLoaded}
-          />
+          <TouchableOpacity
+            activeOpacity={1}
+            onPress={() => {
+              this.props.onClickImage(this.props.image);
+            }}
+            style={{ flex: 1 }}
+          >
+            <Animated.Image
+              style={[styles.image, { opacity: this.state.imageOpacity }]}
+              resizeMode="cover"
+              source={{ uri: this.props.image }}
+              onLoad={this.handleImageLoaded}
+            />
+          </TouchableOpacity>
           {!this.state.isImageLoaded && <BarIndicator color="#1E8689" size={50} />}
         </View>
       </View>
@@ -50,6 +58,7 @@ const styles = StyleSheet.create({
       height: 1,
       width: 0.3,
     },
+    elevation: 5,
   },
   headerContainer: {
     flexDirection: "row",
