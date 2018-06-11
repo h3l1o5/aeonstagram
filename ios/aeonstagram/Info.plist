@@ -9,7 +9,7 @@
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
-	<string>org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)</string>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -26,20 +26,20 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>com.googleusercontent.apps.855474751184-208nklo2r4cj7f9qoelbeqgqhgs45e3u</string>
+			<string>com.googleusercontent.apps.610569492825-rghasvb9km7mfkbrehpj1iv7ibvajc9g</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.googleusercontent.apps.855474751184-55bsutddmg6odfo7glt6ajk2d1guqu9g</string>
+				<string>com.googleusercontent.apps.610569492825-rghasvb9km7mfkbrehpj1iv7ibvajc9g</string>
 			</array>
 		</dict>
 		<dict>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>org.reactjs.native.example.aeonstagram</string>
+			<string>com.martysun25.aeonstagram</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>org.reactjs.native.example.aeonstagram</string>
+				<string>com.martysun25.aeonstagram</string>
 			</array>
 		</dict>
 	</array>
@@ -58,8 +58,14 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>$(PRODUCT_NAME) 想要使用您的相機</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string/>
+	<string></string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>$(PRODUCT_NAME) 想要儲存照片到您的相簿</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>$(PRODUCT_NAME) 想要存取您的相簿</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Entypo.ttf</string>
@@ -88,11 +94,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>$(PRODUCT_NAME) 想要存取您的相簿</string>
-	<key>NSCameraUsageDescription</key>
-	<string>$(PRODUCT_NAME) 想要使用您的相機</string>
-	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>$(PRODUCT_NAME) 想要儲存照片到您的相簿</string>
 </dict>
 </plist>

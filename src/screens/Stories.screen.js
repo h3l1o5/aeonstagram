@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   Dimensions,
   Modal,
+  BackHandler,
 } from "react-native";
 import firebase from "react-native-firebase";
 import Ionicon from "react-native-vector-icons/Ionicons";
@@ -170,7 +171,14 @@ class StoriesScreen extends Component {
           <Text style={styles.addButtonText}>撰寫故事</Text>
           <Ionicon style={styles.addButtonIcon} name="md-add" />
         </TouchableOpacity>
-        <Modal visible={this.state.imageViewer.isShowing} transparent={true} onRequestClose={() => {}}>
+        <Modal
+          visible={this.state.imageViewer.isShowing}
+          transparent={true}
+          onRequestClose={() => {
+            this.setState({ imageViewer: { isShowing: false, url: null } });
+          }}
+          animationType="fade"
+        >
           <ImageViewer
             imageUrls={[
               {

@@ -17,7 +17,7 @@
 		082133B02DAC4E898CC51467 /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 556E44688E6D49EA97D0A4E1 /* EvilIcons.ttf */; };
 		08953EB617AB4C888C63A00C /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 90F65AF7B22F4015B9A0FE68 /* MaterialIcons.ttf */; };
 		0993BEAB20C8E84800A9A2A5 /* GoogleSignIn.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0993BE8120C8E84800A9A2A5 /* GoogleSignIn.framework */; };
-		0993BEEA20C8F00900A9A2A5 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0993BEE920C8F00900A9A2A5 /* GoogleService-Info.plist */; };
+		09B67EF920CE4682000F4C24 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 09B67EF820CE4682000F4C24 /* GoogleService-Info.plist */; };
 		0ADDA5B821394B7791932C62 /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 058C99F2CE15472CBC09ACE7 /* Entypo.ttf */; };
 		133E29F31AD74F7200F7D852 /* libRCTLinking.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 78C398B91ACF4ADC00677621 /* libRCTLinking.a */; };
 		135BCF86F164437088290F54 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 141E9360C9664DB0A43DEB6A /* Zocial.ttf */; };
@@ -380,7 +380,7 @@
 		02B5371949D044AD8D38EEA1 /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
 		058C99F2CE15472CBC09ACE7 /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
 		0993BE8120C8E84800A9A2A5 /* GoogleSignIn.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleSignIn.framework; path = Pods/GoogleSignIn/Frameworks/GoogleSignIn.framework; sourceTree = "<group>"; };
-		0993BEE920C8F00900A9A2A5 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		09B67EF820CE4682000F4C24 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "aeonstagram/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		0B7C1CAD62DF4FC3BFDD20FF /* RNFirebase.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNFirebase.xcodeproj; path = "../node_modules/react-native-firebase/ios/RNFirebase.xcodeproj"; sourceTree = "<group>"; };
 		0CB8E799113448BE99D1BC09 /* libz.tbd */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		139105B61AF99BAD00B5F7CC /* RCTSettings.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTSettings.xcodeproj; path = "../node_modules/react-native/Libraries/Settings/RCTSettings.xcodeproj"; sourceTree = "<group>"; };
@@ -620,10 +620,10 @@
 		13B07FAE1A68108700A75B9A /* aeonstagram */ = {
 			isa = PBXGroup;
 			children = (
+				09B67EF820CE4682000F4C24 /* GoogleService-Info.plist */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
-				0993BEE920C8F00900A9A2A5 /* GoogleService-Info.plist */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
@@ -1284,7 +1284,6 @@
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
-				0993BEEA20C8F00900A9A2A5 /* GoogleService-Info.plist in Resources */,
 				0ADDA5B821394B7791932C62 /* Entypo.ttf in Resources */,
 				082133B02DAC4E898CC51467 /* EvilIcons.ttf in Resources */,
 				5B71FE4AB55B46CABF843DE0 /* Feather.ttf in Resources */,
@@ -1296,6 +1295,7 @@
 				6BCB01BCD7D84D82ADA4AB1C /* Octicons.ttf in Resources */,
 				9DB8C94B197E44138EFA2AFD /* SimpleLineIcons.ttf in Resources */,
 				135BCF86F164437088290F54 /* Zocial.ttf in Resources */,
+				09B67EF920CE4682000F4C24 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1568,6 +1568,7 @@
 					"-lc++",
 					"-w",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.martysun25.aeonstagram;
 				PRODUCT_NAME = aeonstagram;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -1599,6 +1600,7 @@
 					"-lc++",
 					"-w",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.martysun25.aeonstagram;
 				PRODUCT_NAME = aeonstagram;
 				VERSIONING_SYSTEM = "apple-generic";
 			};

@@ -1,31 +1,39 @@
 {
   "project_info": {
-    "project_number": "855474751184",
-    "firebase_url": "https://aeonstagram.firebaseio.com",
-    "project_id": "aeonstagram",
-    "storage_bucket": "aeonstagram.appspot.com"
+    "project_number": "610569492825",
+    "firebase_url": "https://aeonstagram-b525b.firebaseio.com",
+    "project_id": "aeonstagram-b525b",
+    "storage_bucket": "aeonstagram-b525b.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:855474751184:android:b75733018aa7ff25",
+        "mobilesdk_app_id": "1:610569492825:android:b75733018aa7ff25",
         "android_client_info": {
           "package_name": "com.aeonstagram"
         }
       },
       "oauth_client": [
         {
-          "client_id": "855474751184-q337lsnet29psnqpde8nu8d0doqm009p.apps.googleusercontent.com",
+          "client_id": "610569492825-hkvg15khavm0lee4t1nfmetvvm7oaltd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.aeonstagram",
+            "certificate_hash": "b7608727ff9c159649b87e7fdf18c874472e5828"
+          }
+        },
+        {
+          "client_id": "610569492825-ni1cuievfhgvgpv4rgtmcs6hac4afh5u.apps.googleusercontent.com",
           "client_type": 3
         },
         {
-          "client_id": "855474751184-q337lsnet29psnqpde8nu8d0doqm009p.apps.googleusercontent.com",
+          "client_id": "610569492825-ni1cuievfhgvgpv4rgtmcs6hac4afh5u.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyB2iNWOll7Amv02Vp2xXe9fZcuqmlGIFp0"
+          "current_key": "AIzaSyCAY1jd2a4GzU-5g9eIvMEeCS7GqkBay3A"
         }
       ],
       "services": {
@@ -33,8 +41,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "610569492825-ni1cuievfhgvgpv4rgtmcs6hac4afh5u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2

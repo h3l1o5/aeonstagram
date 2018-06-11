@@ -22,7 +22,7 @@ export class LoggedOutScreen extends Component {
     try {
       // Add any configuration settings here:
       await GoogleSignin.configure({
-        iosClientId: "855474751184-55bsutddmg6odfo7glt6ajk2d1guqu9g.apps.googleusercontent.com",
+        iosClientId: "610569492825-rghasvb9km7mfkbrehpj1iv7ibvajc9g.apps.googleusercontent.com",
       });
 
       const data = await GoogleSignin.signIn();
