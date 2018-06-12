@@ -101,12 +101,20 @@ android {
         applicationId "com.aeonstagram"
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 1
+        versionCode 2
         versionName "1.0"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
         vectorDrawables.useSupportLibrary = true
+    }
+    signingConfigs {
+        release {
+            storeFile file("../keystores/keystore")
+            storePassword "Amizz754F!"
+            keyAlias "aeonstagram-keystore"
+            keyPassword "Amizz754F!"
+        }
     }
     splits {
         abi {
@@ -120,6 +128,7 @@ android {
         release {
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            signingConfig signingConfigs.release
         }
     }
     // applicationVariants are e.g. debug, release
