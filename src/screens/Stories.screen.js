@@ -9,14 +9,12 @@ import {
   TouchableOpacity,
   Dimensions,
   Modal,
-  BackHandler,
 } from "react-native";
 import firebase from "react-native-firebase";
 import Ionicon from "react-native-vector-icons/Ionicons";
 import _ from "lodash";
 import moment from "moment";
 import ImageViewer from "react-native-image-zoom-viewer";
-import { BarIndicator } from "react-native-indicators";
 
 import BulletItem from "../components/BulletItem";
 import StoryCard from "../components/StoryCard";
@@ -36,8 +34,7 @@ class StoriesScreen extends Component {
       .firestore()
       .collection("stories")
       .onSnapshot(snapshot => {
-        const stories = _
-          .chain(snapshot.docChanges)
+        const stories = _.chain(snapshot.docChanges)
           .filter(change => change.type === "added")
           .map(change => change.doc.data())
           .value();
@@ -47,15 +44,15 @@ class StoriesScreen extends Component {
         if (!this.state.stories) {
           this.setState({ stories: formattedStories });
         } else {
-          const newStories = _
-            .chain(formattedStories)
+          const newStories = _.chain(formattedStories)
             .reduce((acc, group) => {
-              const existedGroupIndex = _.findIndex(acc, { priority: group.priority });
+              const existedGroupIndex = _.findIndex(acc, {
+                priority: group.priority,
+              });
               if (existedGroupIndex === -1) {
                 return [group, ...acc];
               } else {
-                acc[existedGroupIndex].data = _
-                  .chain([...group.data, ...acc[existedGroupIndex].data])
+                acc[existedGroupIndex].data = _.chain([...group.data, ...acc[existedGroupIndex].data])
                   .sortBy("when")
                   .reverse()
                   .value();
@@ -91,12 +88,10 @@ class StoriesScreen extends Component {
   };
 
   _formatStories = stories => {
-    const result = _
-      .chain(stories)
+    const result = _.chain(stories)
       .groupBy(story => moment(story.when).format("YYYYM"))
       .reduce((acc, group) => {
-        const sortedGroup = _
-          .chain(group)
+        const sortedGroup = _.chain(group)
           .sortBy(["when", "createAt"])
           .reverse()
           .value();
@@ -123,7 +118,7 @@ class StoriesScreen extends Component {
   };
 
   render() {
-    renderItem = ({ item }) => {
+    const renderItem = ({ item }) => {
       return (
         <View style={styles.story}>
           <StoryCard
@@ -136,7 +131,7 @@ class StoriesScreen extends Component {
         </View>
       );
     };
-    renderSectionHeader = ({ section }) => {
+    const renderSectionHeader = ({ section }) => {
       const style = [styles.sectionHeader];
 
       if (section.isFirstGroup) {

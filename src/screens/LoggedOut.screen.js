@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Text, View, StyleSheet, Image, Button, TouchableOpacity, SafeAreaView } from "react-native";
+import { Text, View, StyleSheet, TouchableOpacity, SafeAreaView } from "react-native";
 import FAIcon from "react-native-vector-icons/FontAwesome";
 import Snackbar from "react-native-snackbar";
 import firebase from "react-native-firebase";

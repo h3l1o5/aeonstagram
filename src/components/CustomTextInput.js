@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Text, StyleSheet, View, TextInput } from "react-native";
+import { StyleSheet, View, TextInput } from "react-native";
 
 export default class CustomTextInput extends Component {
   handleChangeText = text => {

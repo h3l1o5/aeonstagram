@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Text, View, Button, SafeAreaView, StyleSheet, TouchableOpacity, Image, Platform } from "react-native";
+import { View, SafeAreaView, StyleSheet, TouchableOpacity, Image, Platform } from "react-native";
 import { StackActions } from "react-navigation";
 import FAIcon from "react-native-vector-icons/FontAwesome";
 import firebase from "react-native-firebase";

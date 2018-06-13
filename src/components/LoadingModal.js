@@ -4,9 +4,9 @@ import { DotIndicator } from "react-native-indicators";
 
 export class LoadingModal extends Component {
   render() {
-    const { visible, onClose } = this.props;
+    const { visible } = this.props;
     return (
-      <Modal animationType="fade" transparent={true} visible={visible} onRequestClose={() => {}}>
+      <Modal animationType="fade" transparent visible={visible} onRequestClose={() => {}}>
         <View style={this.props.blur ? [styles.container, styles.blur] : styles.container}>
           <View style={styles.indicatorContainer}>
             <DotIndicator color="#1E8689" size={8} />

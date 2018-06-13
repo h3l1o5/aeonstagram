@@ -1,5 +1,4 @@
 import React from "react";
-import { StyleSheet, Text, View, Image } from "react-native";
 import { createSwitchNavigator, createStackNavigator } from "react-navigation";
 
 import LoggedOutScreen from "./screens/LoggedOut.screen";
