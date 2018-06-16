@@ -1,8 +1,11 @@
 import React, { Component } from "react";
 import { View, Text, Image, StyleSheet, Animated, TouchableOpacity } from "react-native";
 import { BarIndicator } from "react-native-indicators";
+import FAIcon from "react-native-vector-icons/FontAwesome";
+import * as Animatable from "react-native-animatable";
 class StoryCard extends Component {
   state = {
+    love: 0,
     isImageLoaded: false,
     imageOpacity: new Animated.Value(0),
   };
@@ -43,6 +46,29 @@ class StoryCard extends Component {
           </TouchableOpacity>
           {!this.state.isImageLoaded && <BarIndicator color="#1E8689" size={50} />}
         </View>
+        <View style={styles.footerContainer}>
+          <Animatable.View
+            style={styles.footerLoveCounter}
+            ref={ref => {
+              this.love = ref;
+            }}
+          >
+            <FAIcon name="heart" color="#F25268" size={15} style={{ marginRight: 5 }} />
+            <Text style={{ color: "#aaa" }}>{this.state.love}</Text>
+          </Animatable.View>
+          <TouchableOpacity
+            style={styles.footerLoveButton}
+            onPress={() => {
+              this.love.rubberBand(800);
+              this.setState({ love: this.state.love + 1 });
+              this.props.onClickLove(this.props.id);
+            }}
+          >
+            <Animatable.View animation="pulse" duration={500} iterationCount="infinite">
+              <FAIcon name="heart" color="#fff" size={20} />
+            </Animatable.View>
+          </TouchableOpacity>
+        </View>
       </View>
     );
   }
@@ -74,9 +100,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     marginRight: 10,
   },
-  headerContent: {
-    flex: 1,
-  },
+  headerContent: {},
   headerSubtitle: {
     color: "#8E8E8E",
   },
@@ -90,6 +114,34 @@ const styles = StyleSheet.create({
   },
   image: {
     flex: 1,
+  },
+  footerContainer: {
+    padding: 10,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  footerLoveButton: {
+    backgroundColor: "#F25268",
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    justifyContent: "center",
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOpacity: 0.3,
+    shadowRadius: 1,
+    shadowOffset: {
+      height: 1,
+      width: 0.3,
+    },
+    elevation: 1,
+  },
+  footerLoveCounter: {
+    marginLeft: 10,
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "row",
   },
 });
 

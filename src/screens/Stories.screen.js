@@ -36,7 +36,12 @@ class StoriesScreen extends Component {
       .onSnapshot(snapshot => {
         const stories = _.chain(snapshot.docChanges)
           .filter(change => change.type === "added")
-          .map(change => change.doc.data())
+          .map(change => {
+            return {
+              ...change.doc.data(),
+              id: change.doc.id,
+            };
+          })
           .value();
 
         const formattedStories = this._formatStories(stories);
@@ -64,7 +69,6 @@ class StoriesScreen extends Component {
             .reverse()
             .value();
 
-          console.log(newStories);
           this.setState({ stories: newStories });
         }
         Animated.timing(this.state.containerOpacity, {
@@ -85,6 +89,10 @@ class StoriesScreen extends Component {
 
   handleCloseImageViewer = () => {
     this.setState({ imageViewer: { isShowing: false, url: null } });
+  };
+
+  handleClickStoryLove = id => {
+    alert(id);
   };
 
   _formatStories = stories => {
@@ -122,11 +130,13 @@ class StoriesScreen extends Component {
       return (
         <View style={styles.story}>
           <StoryCard
+            id={item.id}
             avatar={item.creatorAvatar}
             image={item.photoURL}
             title={item.whatHappened}
             subtitle={moment(item.when).format("YYYY年M月D日")}
             onClickImage={this.handleClickStoryImage}
+            onClickLove={this.handleClickStoryLove}
           />
         </View>
       );
