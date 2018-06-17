@@ -10,6 +10,7 @@ import {
   Dimensions,
   Modal,
 } from "react-native";
+import { connect } from "react-redux";
 import firebase from "react-native-firebase";
 import Ionicon from "react-native-vector-icons/Ionicons";
 import _ from "lodash";
@@ -19,10 +20,12 @@ import ImageViewer from "react-native-image-zoom-viewer";
 import BulletItem from "../components/BulletItem";
 import StoryCard from "../components/StoryCard";
 
+import { actions as storiesActions } from "../redux/reducers/stories";
+import { convertStoriesToSectionListFormat } from "../helper";
+
 class StoriesScreen extends Component {
   state = {
     containerOpacity: new Animated.Value(0),
-    stories: null,
     imageViewer: {
       isShowing: false,
       url: null,
@@ -44,33 +47,8 @@ class StoriesScreen extends Component {
           })
           .value();
 
-        const formattedStories = this._formatStories(stories);
+        this.props.onReceiveNewStories(stories);
 
-        if (!this.state.stories) {
-          this.setState({ stories: formattedStories });
-        } else {
-          const newStories = _.chain(formattedStories)
-            .reduce((acc, group) => {
-              const existedGroupIndex = _.findIndex(acc, {
-                priority: group.priority,
-              });
-              if (existedGroupIndex === -1) {
-                return [group, ...acc];
-              } else {
-                acc[existedGroupIndex].data = _.chain([...group.data, ...acc[existedGroupIndex].data])
-                  .sortBy("when")
-                  .reverse()
-                  .value();
-
-                return acc;
-              }
-            }, this.state.stories)
-            .sortBy("priority")
-            .reverse()
-            .value();
-
-          this.setState({ stories: newStories });
-        }
         Animated.timing(this.state.containerOpacity, {
           toValue: 1,
           duration: 500,
@@ -93,36 +71,6 @@ class StoriesScreen extends Component {
 
   handleClickStoryLove = id => {
     alert(id);
-  };
-
-  _formatStories = stories => {
-    const result = _.chain(stories)
-      .groupBy(story => moment(story.when).format("YYYYM"))
-      .reduce((acc, group) => {
-        const sortedGroup = _.chain(group)
-          .sortBy(["when", "createAt"])
-          .reverse()
-          .value();
-
-        const groupDate = moment(sortedGroup[0].when);
-        return [
-          ...acc,
-          {
-            data: sortedGroup,
-            name: groupDate.format("YYYY年M月"),
-            priority: groupDate.year() * 10 + groupDate.month(),
-          },
-        ];
-      }, [])
-      .push({ data: [], name: "起點", priority: 0 })
-      .sortBy("priority")
-      .reverse()
-      .value();
-
-    result[0].isFirstGroup = true;
-    result[result.length - 1].isLastGroup = true;
-
-    return result;
   };
 
   render() {
@@ -160,9 +108,9 @@ class StoriesScreen extends Component {
     return (
       <Animated.View style={[styles.container, { opacity: this.state.containerOpacity }]}>
         <SafeAreaView style={{ flex: 1 }}>
-          {this.state.stories && (
+          {this.props.stories && (
             <SectionList
-              sections={this.state.stories}
+              sections={this.props.stories}
               renderItem={renderItem}
               renderSectionHeader={renderSectionHeader}
               keyExtractor={item => item.createAt}
@@ -251,4 +199,15 @@ const styles = StyleSheet.create({
   },
 });
 
-export default StoriesScreen;
+const mapStateToProps = state => ({
+  stories: convertStoriesToSectionListFormat(state.stories),
+});
+
+const mapDispatchToProps = dispatch => ({
+  onReceiveNewStories: newStories => dispatch(storiesActions.onReceiveNewStories(newStories)),
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(StoriesScreen);
