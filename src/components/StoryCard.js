@@ -18,12 +18,12 @@ class StoryCard extends Component {
     this.giveLoveDebounce = _.debounce(() => {
       this.props.onClickLove(this.props.id, this.state.givenLoveBatch);
       this.setState({ givenLoveBatch: 0 });
-    }, 1000);
+    }, 2000);
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
     if (this.state.love !== nextProps.love) {
-      this.love.rubberBand(500);
+      this.love.rubberBand(1000);
       this.setState({ love: nextProps.love });
     }
   }
@@ -38,7 +38,7 @@ class StoryCard extends Component {
   };
 
   handleClickLove = () => {
-    this.love.rubberBand(500);
+    this.love.rubberBand(1000);
     this.setState({ love: this.state.love + 1, givenLoveBatch: this.state.givenLoveBatch + 1 });
     this.giveLoveDebounce();
   };

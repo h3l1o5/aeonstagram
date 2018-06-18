@@ -75,7 +75,15 @@ export default (state = { data: [], isOnRefreshing: false }, action) => {
     case GIVE_STORY_LOVE:
       return state;
     case GIVE_STORY_LOVE_SUCCESS:
-      return state;
+      const stories = _.map(state.data, story => {
+        if (story.id === action.payload.id) {
+          story.love = story.love + action.payload.amount;
+        }
+
+        return story;
+      });
+
+      return { ...state, data: stories };
     case GIVE_STORY_LOVE_FAILED:
       return state;
     default:

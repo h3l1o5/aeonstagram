@@ -25,6 +25,7 @@ export function* addNewStory(action) {
       when: when,
       photo: `story-photos/${uuid}.jpg`,
       photoURL: storeImageRes.downloadURL,
+      love: 0,
     });
 
     yield put({ type: storiesActionTypes.ADD_NEW_STORY_SUCCESS });
@@ -49,17 +50,19 @@ export function* giveStoryLove(action) {
         }
       });
     });
-    yield put({ type: storiesActionTypes.GIVE_STORY_LOVE_SUCCESS });
+    yield put({ type: storiesActionTypes.GIVE_STORY_LOVE_SUCCESS, payload: { id, amount } });
   } catch (e) {
+    console.error(e);
     yield put({ type: storiesActionTypes.GIVE_STORY_LOVE_FAILED, payload: e });
   }
 }
 
 export function* refreshStories() {
   try {
-    const stories = yield storiesCollection.get().then(res => _.map(res.docs, doc => doc.data()));
+    const stories = yield storiesCollection.get().then(res => _.map(res.docs, doc => ({ ...doc.data(), id: doc.id })));
     yield put({ type: storiesActionTypes.REFRESH_STORIES_SUCCESS, payload: { stories } });
   } catch (e) {
+    console.error(e);
     yield put({ type: storiesActionTypes.REFRESH_STORIES_FAILED, payload: e });
   }
 }

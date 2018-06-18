@@ -85,7 +85,7 @@ class StoriesScreen extends Component {
             avatar={item.creatorAvatar}
             image={item.photoURL}
             title={item.whatHappened}
-            love={item.love || 0}
+            love={item.love}
             subtitle={moment(item.when).format("YYYY年M月D日")}
             onClickImage={this.handleClickStoryImage}
             onClickLove={this.handleClickStoryLove}
