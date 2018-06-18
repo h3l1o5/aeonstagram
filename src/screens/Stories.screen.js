@@ -72,6 +72,10 @@ class StoriesScreen extends Component {
     this.props.giveStoryLove(id, amount);
   };
 
+  handleRefresh = () => {
+    this.props.refreshStories();
+  };
+
   render() {
     const renderItem = ({ item }) => {
       return (
@@ -117,6 +121,8 @@ class StoriesScreen extends Component {
               initialNumToRender={2}
               showsVerticalScrollIndicator={false}
               stickySectionHeadersEnabled={false}
+              refreshing={this.props.isOnRefreshing}
+              onRefresh={this.handleRefresh}
             />
           )}
         </SafeAreaView>
@@ -200,11 +206,13 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => ({
-  stories: convertStoriesToSectionListFormat(state.stories),
+  stories: convertStoriesToSectionListFormat(state.stories.data),
+  isOnRefreshing: state.stories.isOnRefreshing,
 });
 
 const mapDispatchToProps = dispatch => ({
   onReceiveNewStories: newStories => dispatch(storiesActions.onReceiveNewStories(newStories)),
+  refreshStories: () => dispatch(storiesActions.refreshStories()),
   giveStoryLove: (id, amount) => dispatch(storiesActions.giveStoryLove(id, amount)),
 });
 

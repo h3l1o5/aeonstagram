@@ -1,6 +1,7 @@
 import { put, takeEvery } from "redux-saga/effects";
 import firebase from "react-native-firebase";
 import uuidv1 from "uuid/v1";
+import _ from "lodash";
 
 import { actionTypes as storiesActionTypes } from "../reducers/stories";
 
@@ -54,9 +55,21 @@ export function* giveStoryLove(action) {
   }
 }
 
+export function* refreshStories() {
+  try {
+    const stories = yield storiesCollection.get().then(res => _.map(res.docs, doc => doc.data()));
+    yield put({ type: storiesActionTypes.REFRESH_STORIES_SUCCESS, payload: { stories } });
+  } catch (e) {
+    yield put({ type: storiesActionTypes.REFRESH_STORIES_FAILED, payload: e });
+  }
+}
+
 export function* watchAddNewStory() {
   yield takeEvery(storiesActionTypes.ADD_NEW_STORY, addNewStory);
 }
 export function* watchGiveStoryLove() {
   yield takeEvery(storiesActionTypes.GIVE_STORY_LOVE, giveStoryLove);
+}
+export function* watchRefreshStories() {
+  yield takeEvery(storiesActionTypes.REFRESH_STORIES, refreshStories);
 }

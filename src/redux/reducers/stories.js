@@ -1,6 +1,9 @@
 import _ from "lodash";
 
 const RECEIVE_NEW_STORIES = "STORIES:RECEIVE_NEW_STORIES";
+const REFRESH_STORIES = "STORIES:REFRESH_STORIES";
+const REFRESH_STORIES_SUCCESS = "STORIES:REFRESH_STORIES_SUCCESS";
+const REFRESH_STORIES_FAILED = "STORIES:REFRESH_STORIES_FAILED";
 const ADD_NEW_STORY = "STORIES:ADD_NEW_STORY";
 const ADD_NEW_STORY_SUCCESS = "STORIES:ADD_NEW_STORY_SUCCESS";
 const ADD_NEW_STORY_FAILED = "STORIES:ADD_NEW_STORY_FAILED";
@@ -13,6 +16,10 @@ const onReceiveNewStories = newStories => ({
   payload: {
     newStories,
   },
+});
+
+const refreshStories = () => ({
+  type: REFRESH_STORIES,
 });
 
 const addNewStory = newStory => ({
@@ -32,6 +39,9 @@ const giveStoryLove = (id, amount) => ({
 
 export const actionTypes = {
   RECEIVE_NEW_STORIES,
+  REFRESH_STORIES,
+  REFRESH_STORIES_SUCCESS,
+  REFRESH_STORIES_FAILED,
   ADD_NEW_STORY,
   ADD_NEW_STORY_SUCCESS,
   ADD_NEW_STORY_FAILED,
@@ -40,16 +50,22 @@ export const actionTypes = {
   GIVE_STORY_LOVE_FAILED,
 };
 
-export const actions = { onReceiveNewStories, addNewStory, giveStoryLove };
+export const actions = { onReceiveNewStories, refreshStories, addNewStory, giveStoryLove };
 
-export default (state = [], action) => {
+export default (state = { data: [], isOnRefreshing: false }, action) => {
   switch (action.type) {
     case RECEIVE_NEW_STORIES:
-      if (state.length === 0) {
-        return _.sortBy(action.payload.newStories, ["when", "createAt"]);
+      if (state.data.length === 0) {
+        return { ...state, data: _.sortBy(action.payload.newStories, ["when", "createAt"]) };
       } else {
-        return _.sortBy([...state, ...action.payload.newStories], ["when", "createAt"]);
+        return { ...state, data: _.sortBy([...state.data, ...action.payload.newStories], ["when", "createAt"]) };
       }
+    case REFRESH_STORIES:
+      return { ...state, isOnRefreshing: true };
+    case REFRESH_STORIES_SUCCESS:
+      return { data: action.payload.stories, isOnRefreshing: false };
+    case REFRESH_STORIES_FAILED:
+      return { ...state, isOnRefreshing: false };
     case ADD_NEW_STORY:
       return state;
     case ADD_NEW_STORY_SUCCESS:

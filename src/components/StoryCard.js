@@ -21,6 +21,13 @@ class StoryCard extends Component {
     }, 1000);
   }
 
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    if (this.state.love !== nextProps.love) {
+      this.love.rubberBand(500);
+      this.setState({ love: nextProps.love });
+    }
+  }
+
   handleImageLoaded = () => {
     this.setState({ isImageLoaded: true });
     Animated.timing(this.state.imageOpacity, {
