@@ -3,12 +3,23 @@ import { View, Text, Image, StyleSheet, Animated, TouchableOpacity } from "react
 import { BarIndicator } from "react-native-indicators";
 import FAIcon from "react-native-vector-icons/FontAwesome";
 import * as Animatable from "react-native-animatable";
+import _ from "lodash";
+
 class StoryCard extends Component {
   state = {
     love: 0,
+    givenLoveBatch: 0,
     isImageLoaded: false,
     imageOpacity: new Animated.Value(0),
   };
+
+  componentDidMount() {
+    this.setState({ love: this.props.love });
+    this.giveLoveDebounce = _.debounce(() => {
+      this.props.onClickLove(this.props.id, this.state.givenLoveBatch);
+      this.setState({ givenLoveBatch: 0 });
+    }, 1000);
+  }
 
   handleImageLoaded = () => {
     this.setState({ isImageLoaded: true });
@@ -17,6 +28,12 @@ class StoryCard extends Component {
       duration: 800,
       useNativeDriver: true,
     }).start();
+  };
+
+  handleClickLove = () => {
+    this.love.rubberBand(500);
+    this.setState({ love: this.state.love + 1, givenLoveBatch: this.state.givenLoveBatch + 1 });
+    this.giveLoveDebounce();
   };
 
   render() {
@@ -56,14 +73,7 @@ class StoryCard extends Component {
             <FAIcon name="heart" color="#F25268" size={15} style={{ marginRight: 5 }} />
             <Text style={{ color: "#aaa" }}>{this.state.love}</Text>
           </Animatable.View>
-          <TouchableOpacity
-            style={styles.footerLoveButton}
-            onPress={() => {
-              this.love.rubberBand(800);
-              this.setState({ love: this.state.love + 1 });
-              this.props.onClickLove(this.props.id);
-            }}
-          >
+          <TouchableOpacity style={styles.footerLoveButton} onPress={this.handleClickLove}>
             <Animatable.View animation="pulse" duration={500} iterationCount="infinite">
               <FAIcon name="heart" color="#fff" size={20} />
             </Animatable.View>

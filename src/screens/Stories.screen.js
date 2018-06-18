@@ -37,17 +37,16 @@ class StoriesScreen extends Component {
       .firestore()
       .collection("stories")
       .onSnapshot(snapshot => {
-        const stories = _.chain(snapshot.docChanges)
+        const addedStories = _.chain(snapshot.docChanges)
           .filter(change => change.type === "added")
           .map(change => {
-            return {
-              ...change.doc.data(),
-              id: change.doc.id,
-            };
+            return { ...change.doc.data(), id: change.doc.id };
           })
           .value();
 
-        this.props.onReceiveNewStories(stories);
+        if (addedStories.length !== 0) {
+          this.props.onReceiveNewStories(addedStories);
+        }
 
         Animated.timing(this.state.containerOpacity, {
           toValue: 1,
@@ -69,8 +68,8 @@ class StoriesScreen extends Component {
     this.setState({ imageViewer: { isShowing: false, url: null } });
   };
 
-  handleClickStoryLove = id => {
-    alert(id);
+  handleClickStoryLove = (id, amount) => {
+    this.props.giveStoryLove(id, amount);
   };
 
   render() {
@@ -82,6 +81,7 @@ class StoriesScreen extends Component {
             avatar={item.creatorAvatar}
             image={item.photoURL}
             title={item.whatHappened}
+            love={item.love || 0}
             subtitle={moment(item.when).format("YYYY年M月D日")}
             onClickImage={this.handleClickStoryImage}
             onClickLove={this.handleClickStoryLove}
@@ -205,6 +205,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   onReceiveNewStories: newStories => dispatch(storiesActions.onReceiveNewStories(newStories)),
+  giveStoryLove: (id, amount) => dispatch(storiesActions.giveStoryLove(id, amount)),
 });
 
 export default connect(

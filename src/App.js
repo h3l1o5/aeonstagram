@@ -1,12 +1,18 @@
 import React from "react";
-import { createStore } from "redux";
+import { createStore, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
-import devToolsEnhancer from "remote-redux-devtools";
+import { composeWithDevTools } from "remote-redux-devtools";
 import createRootRoute from "./router";
 import rootReducer from "./redux/reducers";
+import createSagaMiddleware from "redux-saga";
 
-const store = createStore(rootReducer, devToolsEnhancer());
+import rootSaga from "./redux/sagas";
+
+const sagaMiddleware = createSagaMiddleware();
+const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(sagaMiddleware)));
 const rootRoute = createRootRoute();
+
+sagaMiddleware.run(rootSaga);
 
 export default class App extends React.Component {
   render() {

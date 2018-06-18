@@ -1,23 +1,23 @@
 import React, { Component } from "react";
 import { View, SafeAreaView, StyleSheet, TouchableOpacity, Image, Platform } from "react-native";
+import { connect } from "react-redux";
 import { StackActions } from "react-navigation";
 import FAIcon from "react-native-vector-icons/FontAwesome";
 import firebase from "react-native-firebase";
 import ImagePicker from "react-native-image-crop-picker";
-import uuidv1 from "uuid/v1";
 
 import ImagePickerPlaceholder from "../components/ImagePickerPlaceholder";
 import CustomTextInput from "../components/CustomTextInput";
 import DateInputIOS from "../components/DateInputIOS";
 import DateInputAndroid from "../components/DateInputAndroid";
-import LoadingModal from "../components/LoadingModal";
+
+import { actions as storiesActions } from "../redux/reducers/stories";
 
 export class AddStoryScreen extends Component {
   state = {
     whatHappened: "",
     when: null,
     image: null,
-    isLoading: false,
   };
 
   handleBack = () => {
@@ -29,35 +29,14 @@ export class AddStoryScreen extends Component {
       return;
     }
 
-    this.setState({ isLoading: true });
+    this.props.addNewStory({
+      currentUser: firebase.auth().currentUser,
+      image: this.state.image,
+      whatHappened: this.state.whatHappened,
+      when: this.state.when,
+    });
 
-    const uuid = uuidv1();
-    firebase
-      .storage()
-      .ref(`story-photos/${uuid}.jpg`)
-      .putFile(this.state.image.path, { contentType: this.state.image.mime })
-      .then(res => {
-        return firebase
-          .firestore()
-          .collection("stories")
-          .add({
-            createAt: new Date(),
-            creator: firebase.auth().currentUser.email,
-            creatorAvatar: firebase.auth().currentUser.photoURL,
-            whatHappened: this.state.whatHappened,
-            when: this.state.when,
-            photo: `story-photos/${uuid}.jpg`,
-            photoURL: res.downloadURL,
-          });
-      })
-      .then(() => {
-        this.setState({ isLoading: false });
-        this.handleBack();
-      })
-      .catch(err => {
-        this.setState({ isLoading: false });
-        console.error(err);
-      });
+    this.handleBack();
   };
 
   handlePickPhoto = () => {
@@ -131,7 +110,6 @@ export class AddStoryScreen extends Component {
             {renderImage}
           </TouchableOpacity>
         </View>
-        <LoadingModal visible={this.state.isLoading} blur />
       </SafeAreaView>
     );
   }
@@ -174,4 +152,11 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AddStoryScreen;
+const mapDispatchToProps = dispatch => ({
+  addNewStory: newStory => dispatch(storiesActions.addNewStory(newStory)),
+});
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(AddStoryScreen);

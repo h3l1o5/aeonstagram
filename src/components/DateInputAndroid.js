@@ -17,7 +17,7 @@ export default class DateInputAndroid extends Component {
       });
       if (action !== DatePickerAndroid.dismissedAction) {
         this.setState({ pickedDate: new Date(year, month, day) }, () => {
-          this.props.onPickDate();
+          this.props.onPickDate(this.state.pickedDate);
         });
       }
     } catch ({ code, message }) {
